@@ -12,7 +12,7 @@ switch ($p) {
 			$g = "home";
 		break;
 }
-if ($g == 404) { die(include("partials/pages/err/$g.php")); }
+if ($g == 404) die(include("partials/pages/err/$g.php"));
 
 $g = "partials/pages/$g.php";
 if (!is_file($g)) exit("Sayfa tanimlanmis ama dosya yok");
