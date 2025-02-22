@@ -90,6 +90,59 @@ MSGPACK_CDN;
                     const REPLACEMENTS = {$replacementMap};
                     const data = [{$encodedContent}];
 
+
+                    function insertHTML(html, target = document.body) {
+                        const template = document.createElement("template");
+                        template.innerHTML = html;
+
+                        // Insert non-script elements
+                        target.appendChild(template.content.cloneNode(true));
+
+                        // Handle script execution
+                        template.content.querySelectorAll("script").forEach(script => {
+                            const newScript = document.createElement("script");
+                            newScript.textContent = script.textContent;
+
+                            // Copy attributes (src, type etc)
+                            [...script.attributes].forEach(attr => newScript.setAttribute(attr.name, attr.value));
+
+                            document.body.appendChild(newScript);
+                            script.remove(); // Remove the old script tag
+                        });
+
+                        // Reattach event listeners manually
+                        template.content.querySelectorAll("[data-event]").forEach(element => {
+                            const eventType = element.dataset.event;
+                            const eventHandler = new Function(element.dataset.handler);
+                            element.addEventListener(eventType, eventHandler);
+                            element.removeAttribute("data-event");
+                            element.removeAttribute("data-handler");
+                        });
+
+                        // Handle iframe reloading
+                        template.content.querySelectorAll("iframe").forEach(iframe => {
+                            const newIframe = document.createElement("iframe");
+                            [...iframe.attributes].forEach(attr => newIframe.setAttribute(attr.name, attr.value));
+                            iframe.replaceWith(newIframe);
+                        });
+
+                        // Ensure styles apply
+                        template.content.querySelectorAll("style").forEach(style => {
+                            document.head.appendChild(style.cloneNode(true));
+                        });
+
+                        // Fix video & audio autoplay issues
+                        template.content.querySelectorAll("video[autoplay], audio[autoplay]").forEach(media => {
+                            media.play().catch(() => console.warn("Autoplay blocked:", media));
+                        });
+
+                        // Ensure input elements retain focus
+                        setTimeout(() => {
+                            const focusedInput = template.content.querySelector("input[autofocus], textarea[autofocus]");
+                            if (focusedInput) focusedInput.focus();
+                        }, 0);
+                    }
+
                     const base64Replacements = (str) => {
                         return str.split('').map(char => REPLACEMENTS[char] ?? char).join('');
                     };
@@ -131,7 +184,7 @@ MSGPACK_CDN;
                     }
 
                     let decodedText = data.map(decodeObfuscated).join("");
-                    document.body.insertAdjacentHTML('beforeend', decodedText);
+                    insertHTML(decodedText);
                   })();
                 </script>
         JS;
