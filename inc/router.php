@@ -49,12 +49,12 @@ class Router
     }
 
     /**
-     * Loads a page from disk.
+     * Checks if a page exists.
      *
-     * @param string $page The page to load.
+     * @param string $page The page name that planned to load.
      * @return string|bool
      */
-    public function loadPageFromDisk(string $page): string|bool
+    public function checkPage(string $page): string|bool
     {
         $path = __DIR__ . "/../partials/pages/$page.php";
         if (file_exists($path)) {

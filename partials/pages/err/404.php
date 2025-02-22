@@ -1,2 +1,4 @@
-<?php if (!defined('PRIV')) exit(); ?>
-BOYLE BIR YER YOK KI (404)
+<?php if (!defined("PRIV")) {
+    exit();
+} ?>
+THIS PLACE DOES NOT EXIST (404)

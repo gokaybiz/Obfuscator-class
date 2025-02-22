@@ -1,7 +1,6 @@
 <?php
 define("PRIV", "1");
 
-require_once "inc/config.php";
 require_once "inc/router.php";
 require_once "inc/obfuscator.php";
 
@@ -9,13 +8,30 @@ include "partials/header.php";
 
 $router = new Router();
 $router->add("/", function () use ($router) {
-    $page = $router->loadPageFromDisk("home");
+    $page = $router->checkPage("home");
 
     if ($page !== false) {
-        $obfuscator = new Obfucator($page);
+        $obfuscator = new Obfuscator($page);
         echo $obfuscator->encode();
     }
     // Don't worry if it doesn't exist, it will be handled by the router.
+});
+
+$router->add("test", function () use ($router) {
+    $page = $router->checkPage("test");
+
+    if ($page !== false) {
+        $obfuscator = new Obfuscator($page);
+        echo $obfuscator->encode();
+    }
+});
+
+$router->add("404", function () use ($router) {
+    $page = $router->checkPage("err/404");
+
+    if ($page !== false) {
+        include $page;
+    }
 });
 
 $route = isset($_GET["page"]) ? $_GET["page"] : "/";
