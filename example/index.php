@@ -1,9 +1,10 @@
 <?php
 define("PRIV", "1");
 
-require_once "inc/router.php";
-require_once "inc/obfuscator.php";
+require __DIR__ . "/../vendor/autoload.php";
+use Gokaybiz\Obfuscator\Obfuscator;
 
+require_once "inc/router.php";
 include "partials/header.php";
 
 $router = new Router();

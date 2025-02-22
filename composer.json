@@ -1,0 +1,21 @@
+{
+  "name": "gokaybiz/obfuscator",
+  "description": "A PHP package to obfuscate your frontend code partially!",
+  "type": "library",
+  "version": "1.0.0",
+  "require": {
+    "rybakit/msgpack": "^0.9.1"
+  },
+  "license": "GPL-3.0-or-later",
+  "autoload": {
+    "psr-4": {
+      "Gokaybiz\\Obfuscator\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "gokaybiz",
+      "email": "gkymhmt@gmail.com"
+    }
+  ]
+}
